@@ -1,0 +1,8 @@
+# Cargo generated files
+**/debug/
+**/target/
+**/*.rs.bk
+*.pdb
+
+# JetBrains IDEs
+.idea/
