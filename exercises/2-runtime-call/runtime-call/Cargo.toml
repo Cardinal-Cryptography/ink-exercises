@@ -1,0 +1,14 @@
+[package]
+name = "runtime-call"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+path = "lib.rs"
+
+[dependencies]
+drink = { path = "../../../../drink/drink" }
+sandbox-with-staking = { path = "../../../runtime/sandbox-with-staking" }
+
+enroll = { path = "../../../contracts/enroll", default-features = false, features = ["ink-as-dependency"] }
+voting = { path = "../../../contracts/voting", default-features = false, features = ["ink-as-dependency"] }
