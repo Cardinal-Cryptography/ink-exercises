@@ -2,8 +2,6 @@
 
 pub mod errors;
 pub mod events;
-#[cfg(test)]
-mod tests;
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 #[ink::scale_derive(Encode, Decode, TypeInfo)]

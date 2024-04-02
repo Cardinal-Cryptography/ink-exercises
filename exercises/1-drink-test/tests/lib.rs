@@ -1,3 +1,5 @@
+#![cfg(test)]
+
 use drink::{
     minimal::MinimalSandbox,
     Sandbox,
@@ -7,7 +9,7 @@ use drink::{
 
 use utils::deploy_contracts;
 
-use crate::{errors::VotingError, VotingResult};
+use voting::{errors::VotingError, VotingResult};
 
 type TestResult<T = ()> = Result<T, Box<dyn std::error::Error>>;
 pub const BOB: [u8; 32] = [2; 32];
@@ -142,15 +144,15 @@ fn expired_subscribers_cannot_vote(mut session: Session) -> TestResult {
     Ok(())
 }
 
-#[drink::test]
-fn cannot_vote_two_times(mut session: Session) -> TestResult {
-    todo!("Implement test")
-}
-
-#[drink::test]
-fn voting_works(mut session: Session) -> TestResult {
-    todo!("Implement test")
-}
+// #[drink::test]
+// fn cannot_vote_two_times(mut session: Session) -> TestResult {
+//     todo!("Implement test")
+// }
+//
+// #[drink::test]
+// fn voting_works(mut session: Session) -> TestResult {
+//     todo!("Implement test")
+// }
 
 mod utils {
     use drink::{
@@ -159,7 +161,7 @@ mod utils {
         session::{NO_ARGS, NO_ENDOWMENT, NO_SALT, Session},
     };
 
-    use crate::tests::{BundleProvider, TestResult};
+    use crate::{BundleProvider, TestResult};
 
     pub fn deploy_contracts(
         session: &mut Session<MinimalSandbox>,
