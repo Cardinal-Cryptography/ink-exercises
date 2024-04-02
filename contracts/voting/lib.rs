@@ -25,7 +25,15 @@ macro_rules! ensure {
 #[ink::contract]
 mod voting {
     use core::cmp::Ordering;
-    use ink::{prelude::string::String, storage::Mapping};
+
+    use ink::{
+        env::{
+            call::{build_call, ExecutionInput, Selector},
+            DefaultEnvironment,
+        },
+        prelude::string::String,
+        storage::Mapping,
+    };
 
     use crate::{errors::*, events::*, VotingResult};
 
@@ -46,15 +54,17 @@ mod voting {
     pub struct Voting {
         title: String,
         admin: AccountId,
+        enroll: AccountId,
         state: State,
     }
 
     impl Voting {
         #[ink(constructor)]
-        pub fn new(title: String) -> Self {
+        pub fn new(title: String, enroll: AccountId) -> Self {
             Self {
                 title,
                 admin: Self::env().caller(),
+                enroll,
                 state: State::Ready,
             }
         }
@@ -144,6 +154,7 @@ mod voting {
             };
             ensure!(now < deadline, VotingError::VotingNotActive);
 
+            Self::check_enroll(&self.enroll, caller)?;
             if voters.insert(*caller, &()).is_some() {
                 return Err(VotingError::AlreadyVoted);
             }
@@ -154,6 +165,21 @@ mod voting {
                 *votes_against = votes_against.saturating_add(1);
             }
 
+            Ok(())
+        }
+
+        fn check_enroll(enroll: &AccountId, caller: &AccountId) -> Result<(), VotingError> {
+            let enrolled = build_call::<DefaultEnvironment>()
+                .call(*enroll)
+                .call_v1()
+                .exec_input(
+                    ExecutionInput::new(Selector::new([0x0, 0x0, 0x0, 0x2])) // `is_active`
+                        .push_arg(caller),
+                )
+                .returns::<bool>()
+                .invoke();
+
+            ensure!(enrolled, VotingError::NotAuthorized);
             Ok(())
         }
     }
