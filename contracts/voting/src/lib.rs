@@ -2,7 +2,10 @@
 
 pub mod errors;
 pub mod events;
+#[cfg(test)]
+mod tests;
 
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
 #[ink::scale_derive(Encode, Decode, TypeInfo)]
 pub enum VotingResult {
     For,
@@ -72,6 +75,7 @@ mod voting {
         #[ink(message, selector = 1)]
         pub fn start_voting(&mut self, deadline: BlockNumber) -> Result<(), VotingError> {
             ensure!(self.env().caller() == self.admin, VotingError::NotAdmin);
+            let deadline = self.env().block_number().saturating_add(deadline);
             self.state = State::Active {
                 voters: Mapping::new(),
                 votes_for: 0,
@@ -112,7 +116,7 @@ mod voting {
         }
 
         #[ink(message, selector = 4)]
-        pub fn end_voting(&mut self) -> Result<(), VotingError> {
+        pub fn end_voting(&mut self) -> Result<VotingResult, VotingError> {
             ensure!(self.env().caller() == self.admin, VotingError::NotAdmin);
             let now = self.env().block_number();
 
@@ -138,7 +142,7 @@ mod voting {
                 result,
             });
 
-            self.env().terminate_contract(self.admin);
+            Ok(result)
         }
 
         fn vote(&mut self, caller: &AccountId, vote: bool) -> Result<(), VotingError> {
