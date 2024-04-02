@@ -1,0 +1,37 @@
+[package]
+name = "sandbox-with-staking"
+edition = "2021"
+version = "0.1.0"
+
+[lib]
+path = "lib.rs"
+
+[dependencies]
+parity-scale-codec = { version = "3.0", features = ["derive"], default-features = false }
+scale-info = { version = "2.10.0", features = ["derive"], default-features = false }
+
+ink_sandbox = { version = "5.0.0" }
+frame-support = { version = "30.0.0", default-features = false }
+frame-system = { version = "30.0.0", default-features = false }
+pallet-contracts = { version = "29.0.0", default-features = false }
+pallet-balances = { version = "30.0.0", default-features = false }
+pallet-timestamp = { version = "29.0.0", default-features = false }
+
+drink = { path = "../../../drink/drink" }
+
+pallet-fake-staking = { path = "../pallet-fake-staking", default-features = false }
+
+[features]
+default = [
+    "std",
+]
+std = [
+    "parity-scale-codec/std",
+    "scale-info/std",
+    "frame-support/std",
+    "frame-system/std",
+    "pallet-balances/std",
+    "pallet-contracts/std",
+    "pallet-timestamp/std",
+    "pallet-fake-staking/std",
+]
