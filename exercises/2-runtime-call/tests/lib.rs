@@ -43,6 +43,18 @@ fn there_is_an_actual_stake_if_the_pool_has_enough_money(mut session: Session) -
 }
 
 #[drink::test(sandbox = SandboxWithStaking)]
+fn not_enough_is_not_enough(mut session: Session) -> TestResult {
+    let contract = deploy_contract(&mut session)?;
+
+    for _ in 0..10 {
+        session.call::<_, ()>("stake", NO_ARGS, Some(1))??;
+        assert_eq!(stake_of(&mut session, contract.clone()), None);
+    }
+
+    Ok(())
+}
+
+#[drink::test(sandbox = SandboxWithStaking)]
 fn cumulates_stake_from_many_users_and_then_stakes(mut session: Session) -> TestResult {
     let contract = deploy_contract(&mut session)?;
 
