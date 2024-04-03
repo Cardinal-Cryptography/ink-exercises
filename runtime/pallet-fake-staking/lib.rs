@@ -22,10 +22,14 @@ pub mod pallet {
     #[derive(Clone, Eq, PartialEq)]
     pub enum Error<T> {
         NotEnoughStake,
+        NotStaker,
     }
 
     #[pallet::storage]
     pub type Validators<T: Config> = StorageMap<_, Twox64Concat, T::AccountId, ()>;
+
+    #[pallet::storage]
+    pub type Stakers<T: Config> = StorageMap<_, Twox64Concat, T::AccountId, u128>;
 
     #[pallet::pallet]
     #[pallet::storage_version(STORAGE_VERSION)]
@@ -44,8 +48,20 @@ pub mod pallet {
         #[pallet::call_index(1)]
         #[pallet::weight(0)]
         pub fn stake(origin: OriginFor<T>, stake: u128) -> DispatchResult {
-            ensure_signed(origin)?;
+            let staker = ensure_signed(origin)?;
             ensure!(stake > 100, Error::<T>::NotEnoughStake);
+            Stakers::<T>::mutate(staker, |s| *s = Some(s.unwrap_or(0) + stake));
+            Ok(())
+        }
+
+        #[pallet::call_index(2)]
+        #[pallet::weight(0)]
+        pub fn stake_more(origin: OriginFor<T>, more: u128) -> DispatchResult {
+            let staker = ensure_signed(origin)?;
+            Stakers::<T>::mutate(staker, |s| match s {
+                Some(stake) => { *stake.saturating_add(more); Ok(()) },
+                None => Err(Error::<T>::NotStaker),
+            })?;
             Ok(())
         }
     }

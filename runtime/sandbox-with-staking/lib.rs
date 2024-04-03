@@ -82,7 +82,7 @@ impl pallet_contracts::Config for RuntimeWithStaking {
     type Currency = Balances;
     type RuntimeEvent = RuntimeEvent;
     type RuntimeCall = RuntimeCall;
-    type CallFilter = ();
+    type CallFilter = frame_support::traits::Everything;
     type WeightPrice = Self;
     type WeightInfo = ();
     type ChainExtension = ();
