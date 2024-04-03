@@ -1,4 +1,3 @@
-use drink::sp_externalities::Extension;
 use frame_support::{
     __private::TestExternalities,
     construct_runtime, derive_impl, parameter_types,

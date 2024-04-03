@@ -10,4 +10,4 @@ path = "lib.rs"
 enroll = { path = "../../../contracts/enroll", default-features = false, features = ["ink-as-dependency"] }
 voting = { path = "../../../contracts/voting", default-features = false, features = ["ink-as-dependency"] }
 
-drink = { path = "../../../../drink/drink" }
+drink = { version = "0.17.0" }

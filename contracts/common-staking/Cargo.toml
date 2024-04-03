@@ -1,7 +1,7 @@
 [package]
 name = "common-staking"
 version = "0.1.0"
-authors = ["[your_name] <[your_email]>"]
+authors = ["Cardinal"]
 edition = "2021"
 
 [lib]

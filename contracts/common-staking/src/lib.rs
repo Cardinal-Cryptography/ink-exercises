@@ -4,15 +4,6 @@ mod runtime_call;
 
 #[ink::contract]
 mod common_staking {
-    use ink::{
-        env::{
-            call::{build_call, ExecutionInput, Selector},
-            DefaultEnvironment,
-        },
-        prelude::string::String,
-        storage::Mapping,
-    };
-
     use crate::runtime_call::{FakeStakingCall, RuntimeCall};
 
     #[ink(storage)]

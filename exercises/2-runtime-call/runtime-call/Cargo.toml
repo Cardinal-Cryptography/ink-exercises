@@ -7,7 +7,7 @@ edition = "2021"
 path = "lib.rs"
 
 [dependencies]
-drink = { path = "../../../../drink/drink" }
+drink = { version = "0.17.0" }
 sandbox-with-staking = { path = "../../../runtime/sandbox-with-staking" }
 
 enroll = { path = "../../../contracts/enroll", default-features = false, features = ["ink-as-dependency"] }
