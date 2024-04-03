@@ -1,3 +1,4 @@
+/// Errors that can occur while interacting with the voting contract.
 #[derive(Debug, PartialEq, Eq)]
 #[ink::scale_derive(Encode, Decode, TypeInfo)]
 pub enum VotingError {

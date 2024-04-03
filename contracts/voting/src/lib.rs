@@ -3,6 +3,7 @@
 pub mod errors;
 pub mod events;
 
+/// The result of a voting.
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 #[ink::scale_derive(Encode, Decode, TypeInfo)]
 pub enum VotingResult {
@@ -23,6 +24,8 @@ macro_rules! ensure {
     }};
 }
 
+/// A simple voting contract. It allows users to vote for or against a proposal. Only enrolled users
+/// can vote. The voting is started by the admin and ends after a deadline.
 #[ink::contract]
 mod voting {
     use core::cmp::Ordering;
@@ -38,28 +41,40 @@ mod voting {
 
     use crate::{errors::*, events::*, VotingResult};
 
+    /// The state of the voting contract.
     #[ink::storage_item]
     #[derive(Debug)]
     enum State {
+        /// The voting is ready to start, but voting is disabled.
         Ready,
+        /// The voting is active and users can vote.
         Active {
             voters: Mapping<AccountId, ()>,
             votes_for: u32,
             votes_against: u32,
             deadline: BlockNumber,
         },
+        /// The voting is done, voting is disabled..
         Done,
     }
 
     #[ink(storage)]
     pub struct Voting {
+        /// The title of the voting.
         title: String,
+        /// The admin of the voting.
         admin: AccountId,
+        /// The account that can enroll users.
         enroll: AccountId,
+        /// The state of the voting process.
         state: State,
     }
 
     impl Voting {
+        /// Creates a new voting contract.
+        ///
+        /// The `title` is the title of the voting. The `enroll` is the account that can enroll
+        /// users and is used to check if a user is enrolled.
         #[ink(constructor)]
         pub fn new(title: String, enroll: AccountId) -> Self {
             Self {
@@ -70,6 +85,8 @@ mod voting {
             }
         }
 
+        /// Starts the voting process. Can only be called by the admin. The `deadline` is the number
+        /// of blocks after which the voting ends.
         #[ink(message, selector = 1)]
         pub fn start_voting(&mut self, deadline: BlockNumber) -> Result<(), VotingError> {
             ensure!(self.env().caller() == self.admin, VotingError::NotAdmin);
@@ -89,6 +106,7 @@ mod voting {
             Ok(())
         }
 
+        /// Votes for the proposal.
         #[ink(message, selector = 2)]
         pub fn vote_for(&mut self) -> Result<(), VotingError> {
             let caller = self.env().caller();
@@ -101,6 +119,7 @@ mod voting {
             Ok(())
         }
 
+        /// Votes against the proposal.
         #[ink(message, selector = 3)]
         pub fn vote_against(&mut self) -> Result<(), VotingError> {
             let caller = self.env().caller();
@@ -113,6 +132,7 @@ mod voting {
             Ok(())
         }
 
+        /// Ends the voting process and returns the result.
         #[ink(message, selector = 4)]
         pub fn end_voting(&mut self) -> Result<VotingResult, VotingError> {
             ensure!(self.env().caller() == self.admin, VotingError::NotAdmin);
@@ -170,6 +190,7 @@ mod voting {
             Ok(())
         }
 
+        /// Checks if the given account is enrolled.
         fn check_enroll(enroll: &AccountId, caller: &AccountId) -> Result<(), VotingError> {
             let enrolled = build_call::<DefaultEnvironment>()
                 .call(*enroll)

@@ -1,5 +1,6 @@
 [package]
 name = "sandbox-with-staking"
+authors = ["Cardinal"]
 edition = "2021"
 version = "0.1.0"
 

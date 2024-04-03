@@ -3,17 +3,18 @@ use ink::{
     primitives::AccountId,
 };
 
-/// Simple chain extension that provides some staking information.
+/// Simple chain extension that provides information about the validator status.
 #[ink::chain_extension(extension = 0)]
 pub trait StakingExtension {
     type ErrorCode = StakingExtensionErrorCode;
 
-    /// Returns the number of the validators.
+    /// Returns `true` if the given account is a validator.
     #[allow(clippy::wrong_self_convention)]
     #[ink(function = 41, handle_status = false)]
     fn is_validator(account: AccountId) -> bool;
 }
 
+/// Error codes that can be returned by the `StakingExtension`.
 #[derive(Copy, Clone, PartialEq, Eq, Debug)]
 #[ink::scale_derive(Encode, Decode, TypeInfo)]
 pub struct StakingExtensionErrorCode(u32);

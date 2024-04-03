@@ -1,7 +1,9 @@
 #![cfg_attr(not(feature = "std"), no_std, no_main)]
 
+/// The number of blocks a user is subscribed for when paying 1 token.
 pub const BLOCKS_FOR_TOKEN: u32 = 10;
 
+/// A simple contract that allows users to be enlisted for some period by paying a fee.
 #[ink::contract]
 mod enroll {
     use ink::storage::Mapping;
@@ -10,10 +12,14 @@ mod enroll {
 
     #[ink(storage)]
     pub struct Enroll {
+        /// The mapping of subscriptions.
+        ///
+        /// It might contain expired subscriptions (we do not clean it).
         subscriptions: Mapping<AccountId, BlockNumber>,
     }
 
     impl Enroll {
+        /// Creates a new `Enroll` contract.
         #[ink(constructor)]
         pub fn new() -> Self {
             Self {
@@ -21,6 +27,8 @@ mod enroll {
             }
         }
 
+        /// Makes the caller to be subscribed for a period proportional to the transferred value
+        /// (according to the `BLOCKS_FOR_TOKEN` constant).
         #[ink(message, payable, selector = 1)]
         pub fn subscribe(&mut self) {
             let caller = self.env().caller();
@@ -37,6 +45,7 @@ mod enroll {
             self.subscriptions.insert(caller, &new_subscription_end);
         }
 
+        /// Returns `true` if the given account has an active subscription.
         #[ink(message, selector = 2)]
         pub fn is_active(&self, account: AccountId) -> bool {
             match self.subscriptions.get(account) {
@@ -62,6 +71,10 @@ mod enroll {
 
         use super::*;
 
+        /// 1. Deploy the contract.
+        /// 2. Check that the subscription is not active.
+        /// 3. Subscribe to the contract.
+        /// 4. Check that the subscription is active.
         #[ink::test]
         fn subscribing_works() {
             let mut enroll = Enroll::new();
@@ -76,6 +89,11 @@ mod enroll {
             assert!(enroll.is_active(actor));
         }
 
+        /// 1. Deploy the contract.
+        /// 2. Check that the subscription is not active.
+        /// 3. Subscribe to the contract.
+        /// 4. Advance the block number to the end of the subscription.
+        /// 5. Check that the subscription is not active.
         #[ink::test]
         fn subscription_ends() {
             let mut enroll = Enroll::new();
@@ -95,6 +113,12 @@ mod enroll {
             assert!(!enroll.is_active(actor));
         }
 
+        /// 1. Deploy the contract.
+        /// 2. Subscribe to the contract.
+        /// 3. Advance the block number to the end of the subscription.
+        /// 4. Check that the subscription is not active.
+        /// 5. Subscribe to the contract again.
+        /// 6. Check that the subscription is active.
         #[ink::test]
         fn revive_subscription() {
             let mut enroll = Enroll::new();
