@@ -1,0 +1,14 @@
+[package]
+name = "tests"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+path = "lib.rs"
+
+[dependencies]
+drink = { version = "0.17.0" }
+pallet-fake-staking = { path = "../../../runtime/pallet-fake-staking" }
+sandbox-with-staking = { path = "../../../runtime/sandbox-with-staking" }
+
+common-staking = { path = "../../../contracts/common-staking", default-features = false, features = ["ink-as-dependency"] }

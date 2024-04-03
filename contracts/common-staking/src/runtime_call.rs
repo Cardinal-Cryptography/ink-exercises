@@ -20,7 +20,7 @@ pub enum FakeStakingCall {
     Stake {
         stake: u128,
     },
-    #[codec(index = 1)]
+    #[codec(index = 2)]
     StakeMore {
         more: u128,
     }

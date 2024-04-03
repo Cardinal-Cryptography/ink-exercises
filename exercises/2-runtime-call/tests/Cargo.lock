@@ -738,6 +738,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2382f75942f4b3be3690fe4f86365e9c853c1587d6ee58212cebf6e2a9ccd101"
 
 [[package]]
+name = "common-staking"
+version = "0.1.0"
+dependencies = [
+ "ink",
+]
+
+[[package]]
 name = "const-oid"
 version = "0.9.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1440,13 +1447,6 @@ dependencies = [
  "sec1",
  "subtle",
  "zeroize",
-]
-
-[[package]]
-name = "enroll"
-version = "0.1.0"
-dependencies = [
- "ink",
 ]
 
 [[package]]
@@ -3586,16 +3586,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fc874b127765f014d792f16763a81245ab80500e2ad921ed4ee9e82481ee08fe"
 
 [[package]]
-name = "runtime-call"
-version = "0.1.0"
-dependencies = [
- "drink",
- "enroll",
- "sandbox-with-staking",
- "voting",
-]
-
-[[package]]
 name = "rustc-demangle"
 version = "0.1.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4864,6 +4854,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "tests"
+version = "0.1.0"
+dependencies = [
+ "common-staking",
+ "drink",
+ "pallet-fake-staking",
+ "sandbox-with-staking",
+]
+
+[[package]]
 name = "thiserror"
 version = "1.0.58"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5314,13 +5314,6 @@ name = "version_check"
 version = "0.9.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
-
-[[package]]
-name = "voting"
-version = "0.1.0"
-dependencies = [
- "ink",
-]
 
 [[package]]
 name = "w3f-bls"

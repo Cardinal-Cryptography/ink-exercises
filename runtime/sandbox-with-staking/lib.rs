@@ -1,11 +1,11 @@
 use frame_support::{
     __private::TestExternalities,
     construct_runtime, derive_impl, parameter_types,
-    sp_runtime::{AccountId32, Perbill, testing::H256, traits::Convert},
+    sp_runtime::{testing::H256, traits::Convert, AccountId32, Perbill},
     traits::{ConstBool, ConstU128, ConstU32, ConstU64, Currency, Randomness},
     weights::Weight,
 };
-use ink_sandbox::{AccountIdFor, BlockBuilder, RuntimeMetadataPrefixed, Sandbox};
+use ink_sandbox::{AccountIdFor, BlockBuilder, Extension, RuntimeMetadataPrefixed, Sandbox};
 
 construct_runtime!(
     pub enum RuntimeWithStaking {
