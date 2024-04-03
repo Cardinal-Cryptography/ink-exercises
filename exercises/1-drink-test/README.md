@@ -9,7 +9,7 @@ Firstly, let's take a look at the contracts that we will be working with.
 ### Enroll
 
 The `Enroll` contract is a simple contract that allows users to enroll themselves in a public list. 
-This is a paid subscription which expires after a certain period of time.
+This is a paid subscription, which expires after a certain period.
 Specifically, the contract has the following methods:
 ```rust
 /// Constructs a new Enroll contract.
@@ -31,13 +31,13 @@ pub fn is_active(&self, account: AccountId) -> bool
 
 The contract crate also specifies `pub const BLOCKS_FOR_TOKEN: u32 = 10;`.
 This means that for every token transferred to the `subscribe` method, the caller will be enrolled for 10 blocks.
-After the paid period expires, the caller will be no longer active subscriber.
+After the paid period expires, the caller will no longer be an active subscriber.
 
 The contract does nothing more than that.
-However, it can be used for other contracts, that want to limit their functionality to only active subscribers.
+However, it can be used in other contracts, that want to limit their functionality only to the active subscribers.
 
 The source code of the contract can be found in the [`lib.rs`](../../contracts/enroll/lib.rs) file.
-There, you will also find the integration tests written with `ink::test` macro, that utilizes the off-chain engine.
+There, you will also find the integration tests written with `ink::test` macro, that utilize the off-chain engine.
 
 ### Voting
 
@@ -67,7 +67,7 @@ pub fn vote_for(&mut self) -> Result<(), VotingError>
 
 ```rust
 /// Vote against the proposal.
-#[ink(message, selector = 2)]
+#[ink(message, selector = 3)]
 pub fn vote_against(&mut self) -> Result<(), VotingError>
 ```
 
@@ -92,7 +92,7 @@ More detailed description, materials and examples are available here:
 
 ## Task
 
-In the current directory, you will find the `tests` crate with some tests written in the Drink library for the `Voting` contract.
+In the current directory, you will find the `tests` crate with some tests written in the drink library for the `Voting` contract.
 
 1. Run the existing tests with the following command:
 ```bash
@@ -138,3 +138,5 @@ fn voting_works(mut session: Session) -> TestResult {
     todo!("Implement test")
 }
 ```
+
+_Hint: start with reading the existing tests and try to reuse as many pieces as possible._

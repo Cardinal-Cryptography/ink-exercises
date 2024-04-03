@@ -31,7 +31,7 @@ fn non_admin_cannot_start_voting(mut session: Session) -> TestResult {
         "start_voting",
         &["10"], // deadline
         NO_ENDOWMENT,
-    );
+    )?;
     assert_eq!(error, VotingError::NotAdmin);
 
     Ok(())
@@ -58,7 +58,7 @@ fn cannot_end_voting_before_start(mut session: Session) -> TestResult {
     deploy_contracts(&mut session)?;
 
     let error =
-        session.call_and_expect_error::<_, VotingError>("end_voting", NO_ARGS, NO_ENDOWMENT);
+        session.call_and_expect_error::<_, VotingError>("end_voting", NO_ARGS, NO_ENDOWMENT)?;
     assert_eq!(error, VotingError::CannotEndVoting);
 
     Ok(())
@@ -73,7 +73,7 @@ fn cannot_end_voting_before_deadline(mut session: Session) -> TestResult {
         .expect("start_voting failed");
 
     let error =
-        session.call_and_expect_error::<_, VotingError>("end_voting", NO_ARGS, NO_ENDOWMENT);
+        session.call_and_expect_error::<_, VotingError>("end_voting", NO_ARGS, NO_ENDOWMENT)?;
     assert_eq!(error, VotingError::CannotEndVoting);
 
     Ok(())
@@ -91,7 +91,7 @@ fn non_admin_cannot_end_voting(mut session: Session) -> TestResult {
 
     session.set_actor(BOB.into());
     let error =
-        session.call_and_expect_error::<_, VotingError>("end_voting", NO_ARGS, NO_ENDOWMENT);
+        session.call_and_expect_error::<_, VotingError>("end_voting", NO_ARGS, NO_ENDOWMENT)?;
     assert_eq!(error, VotingError::NotAdmin);
 
     Ok(())
@@ -138,7 +138,7 @@ fn expired_subscribers_cannot_vote(mut session: Session) -> TestResult {
         .expect("start_voting failed");
 
     session.set_actor(BOB.into());
-    let error = session.call_and_expect_error::<_, VotingError>("vote_for", NO_ARGS, NO_ENDOWMENT);
+    let error = session.call_and_expect_error::<_, VotingError>("vote_for", NO_ARGS, NO_ENDOWMENT)?;
     assert_eq!(error, VotingError::NotAuthorized);
 
     Ok(())
