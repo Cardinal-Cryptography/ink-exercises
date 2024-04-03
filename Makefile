@@ -7,12 +7,13 @@ build-contracts: ## Build the contracts
 	@cargo contract build --release --manifest-path contracts/common-staking/Cargo.toml
 	@cargo contract build --release --manifest-path contracts/enroll/Cargo.toml
 	@cargo contract build --release --manifest-path contracts/voting/Cargo.toml
+	@cargo contract build --release --manifest-path contracts/weighted-voting/Cargo.toml
 
 .PHONY: check-exercises
 check-exercises: ## Run the exercises
-## Exercise 1
 	@cargo test --manifest-path exercises/1-drink-test/tests/Cargo.toml --release
 	@cargo test --manifest-path exercises/2-runtime-call/tests/Cargo.toml --release
+	@cargo test --manifest-path exercises/3-chain-extension/tests/Cargo.toml --release
 
 .PHONY: all
 all: build-contracts check-exercises ## Run all the targets

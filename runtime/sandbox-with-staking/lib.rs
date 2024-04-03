@@ -1,3 +1,5 @@
+mod chain_extension;
+
 use frame_support::{
     __private::TestExternalities,
     construct_runtime, derive_impl, parameter_types,
@@ -6,6 +8,7 @@ use frame_support::{
     weights::Weight,
 };
 use ink_sandbox::{AccountIdFor, BlockBuilder, Extension, RuntimeMetadataPrefixed, Sandbox};
+use crate::chain_extension::StakingExtension;
 
 construct_runtime!(
     pub enum RuntimeWithStaking {
@@ -84,7 +87,7 @@ impl pallet_contracts::Config for RuntimeWithStaking {
     type CallFilter = frame_support::traits::Everything;
     type WeightPrice = Self;
     type WeightInfo = ();
-    type ChainExtension = ();
+    type ChainExtension = StakingExtension;
     type Schedule = SandboxSchedule;
     type CallStack = [pallet_contracts::Frame<Self>; 5];
     type DepositPerByte = ConstU128<1>;
