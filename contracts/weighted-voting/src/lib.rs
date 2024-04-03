@@ -137,35 +137,7 @@ mod weighted_voting {
         }
 
         fn vote(&mut self, vote: bool) -> Result<(), VotingError> {
-            let now = self.env().block_number();
-            let caller = self.env().caller();
-
-            let strength = match self.env().extension().is_validator(caller) {
-                true => VALIDATOR_VOTE,
-                false => STANDARD_VOTE,
-            };
-
-            let State::Active {
-                ref mut voters,
-                ref mut votes_for,
-                ref mut votes_against,
-                deadline,
-            } = self.state
-            else {
-                return Err(VotingError::VotingNotActive);
-            };
-            ensure!(now < deadline, VotingError::VotingNotActive);
-
-            if voters.insert(caller, &()).is_some() {
-                return Err(VotingError::AlreadyVoted);
-            }
-
-            if vote {
-                *votes_for = votes_for.saturating_add(strength);
-            } else {
-                *votes_against = votes_against.saturating_add(strength);
-            }
-
+            // todo: implement
             Ok(())
         }
     }

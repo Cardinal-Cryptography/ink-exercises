@@ -36,23 +36,7 @@ mod common_staking {
         /// accumulate the transferred balance.
         #[ink(message, payable, selector = 1)]
         pub fn stake(&mut self) {
-            let transferred_balance = self.env().transferred_value();
-            let accumulated_balance = self.env().balance();
-
-            if accumulated_balance >= THRESHOLD && self.already_staking {
-                self.env()
-                    .call_runtime(&RuntimeCall::FakeStaking(FakeStakingCall::StakeMore {
-                        more: transferred_balance,
-                    }))
-                    .expect("Failed to call FakeStaking::StakeMore");
-            } else if accumulated_balance >= THRESHOLD && !self.already_staking {
-                self.env()
-                    .call_runtime(&RuntimeCall::FakeStaking(FakeStakingCall::Stake {
-                        stake: accumulated_balance,
-                    }))
-                    .expect("Failed to call FakeStaking::Stake");
-                self.already_staking = true;
-            }
+            // todo: implement
         }
     }
 
